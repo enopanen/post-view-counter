@@ -2,8 +2,8 @@
 /*
 Plugin Name: Post View Counter
 Plugin URI: https://example.com/
-Description: Tracks the number of views for each post and displays the view count in the posts page of the dashboard.
-Version: 1.0
+Description: Tracks the number of views for each post and displays the view count in the posts page of the dashboard. Allows sorting posts by view count.
+Version: 1.2
 Author: Eric Nopanen
 Author URI: https://ericnopanen.com/
 */
@@ -57,3 +57,24 @@ function display_post_views_count($column_name, $post_id) {
     }
 }
 add_action('manage_posts_custom_column', 'display_post_views_count', 10, 2);
+
+// Function to make the post view count column sortable
+function make_post_views_column_sortable($columns) {
+    $columns['post_views'] = 'post_views';
+    return $columns;
+}
+add_filter('manage_edit-post_sortable_columns', 'make_post_views_column_sortable');
+
+// Function to modify the query to sort posts by view count
+function sort_posts_by_views($query) {
+    if (!is_admin() || !$query->is_main_query()) {
+        return;
+    }
+
+    $orderby = $query->get('orderby');
+    if ($orderby === 'post_views') {
+        $query->set('meta_key', 'post_views_count');
+        $query->set('orderby', 'meta_value_num');
+    }
+}
+add_action('pre_get_posts', 'sort_posts_by_views');
