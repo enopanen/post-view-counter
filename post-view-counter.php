@@ -4,7 +4,7 @@ Plugin Name: Post View Counter
 Plugin URI: https://example.com/
 Description: Tracks the number of views for each post and displays the view count in the posts page of the dashboard.
 Version: 1.0
-Author: Your Name
+Author: Eric Nopanen
 Author URI: https://example.com/
 */
 
